@@ -1,5 +1,18 @@
 version: 0.0
 os: linux
 files:
-  - source: /target/calculator.war
+  - source: /calculator.war
     destination: /opt/tomcat/webapps/
+hooks:
+  ApplicationStop:
+    - location: scripts/stop_application.sh
+      timeout: 300
+  BeforeInstall:
+    - location: scripts/backup.sh
+      timeout: 300
+  ApplicationStart:
+    - location: scripts/tomcat.sh
+    - location: scripts/start_application.sh
+      timeout: 300
+  ValidateService:
+    - location: scripts/basic_health_check.sh
